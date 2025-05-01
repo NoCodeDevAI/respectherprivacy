@@ -1,6 +1,6 @@
-// src/app/about/page.tsx
+'use client';
 
-import Image from 'next/image';
+import { useEffect, useState } from 'react';
 
 export default function AboutPage() {
     return (
@@ -13,7 +13,7 @@ export default function AboutPage() {
         <div className="max-w-4xl mx-auto text-center relative z-10">
           <h1 className="text-4xl md:text-5xl font-bold mb-6 bg-gradient-to-r from-accent-pink to-muted-pink text-transparent bg-clip-text">Our Mission</h1>
           <p className="text-xl text-gray-300 leading-relaxed">
-            We believe that <span className="text-soft-pink font-medium">Your Pain Is Not Invisible <i>( You didn’t deserve this. Not then. Not now. Not ever. )</i></span>. At Respect Her Privacy, we're committed to creating a safer digital world by combating the non-consensual sharing of intimate images and videos.
+            We believe that <span className="text-soft-pink font-medium">Your Pain Is Not Invisible <i>( You didn&apos;t deserve this. Not then. Not now. Not ever. )</i></span>. At Respect Her Privacy, we&apos;re committed to creating a safer digital world by combating the non-consensual sharing of intimate images and videos.
           </p>
         </div>
       </section>

@@ -1,5 +1,4 @@
 import { supabase } from './supabaseClient';
-import { v4 as uuidv4 } from 'uuid';
 
 export interface ReportData {
   harmful_link: string;
@@ -12,7 +11,12 @@ export interface ReportResponse {
   message?: string;
   data?: Array<{ report_identifier: string }>;
   isDuplicate?: boolean;
-  debugInfo?: any;
+  debugInfo?: {
+    timestamp: string;
+    reportId: string;
+    status: string;
+    error?: string;
+  };
 }
 
 // Environment check
@@ -51,7 +55,7 @@ function normalizeUrl(url: string): string {
     const parsedUrl = new URL(hasProtocol ? url : `https://${url}`);
 
     // Normalize components
-    let hostname = parsedUrl.hostname.replace(/^www\./i, '').toLowerCase();
+    const hostname = parsedUrl.hostname.replace(/^www\./i, '').toLowerCase();
     let pathname = parsedUrl.pathname.replace(/\/+$/, '') || '/';
     pathname = pathname.replace(/\/+/g, '/'); // Collapse multiple slashes
 

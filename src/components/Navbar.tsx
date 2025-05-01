@@ -3,21 +3,21 @@
 'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
 import { useState } from 'react';
 
 export default function NavBar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
-    <nav className="bg-background/80 backdrop-blur-sm border-b border-accent-pink/20 relative z-20 h-[60px] shadow-lg">
-      <div className="max-w-6xl h-full mx-auto px-6 py-4 flex justify-between items-center">
-      <Link href="/" className="flex items-center space-x-3 hover:opacity-80 transition-opacity">
-  <img src="/images/logo-text.svg" alt="Logo" className="h-10 w-10" />
- 
-</Link>
+    <nav className="bg-background/80 backdrop-blur-sm border-b border-accent-pink/20 relative z-20 h-[60px] shadow-lg" suppressHydrationWarning>
+      <div className="max-w-6xl h-full mx-auto px-6 py-4 flex justify-between items-center" suppressHydrationWarning>
+        <Link href="/" className="flex items-center space-x-3 hover:opacity-80 transition-opacity">
+          <Image src="/images/logo-text.svg" alt="Logo" width={40} height={40} className="h-10 w-10" />
+        </Link>
         
         {/* Desktop Menu */}
-        <div className="space-x-6 text-sm hidden md:flex">
+        <div className="space-x-6 text-sm hidden md:flex" suppressHydrationWarning>
           <Link href="/" className="text-gray-300 hover:text-accent-pink  transition-all duration-300">Home</Link>
           <Link href="/about" className="text-gray-300 hover:text-accent-pink  transition-all duration-300">About</Link>
           <Link href="/resources" className="text-gray-300 hover:text-accent-pink  transition-all duration-300">Resources</Link>
@@ -48,8 +48,8 @@ export default function NavBar() {
 
       {/* Mobile Menu Dropdown */}
       {mobileMenuOpen && (
-        <div className="md:hidden bg-background/95 backdrop-blur-sm border-t border-accent-pink/20 absolute w-full animate-fadeIn shadow-lg">
-          <div className="flex flex-col px-6 py-4 space-y-4">
+        <div className="md:hidden bg-background/95 backdrop-blur-sm border-t border-accent-pink/20 absolute w-full animate-fadeIn shadow-lg" suppressHydrationWarning>
+          <div className="flex flex-col px-6 py-4 space-y-4" suppressHydrationWarning>
             <Link 
               href="/" 
               className="text-gray-300 hover:text-accent-pink hover:shadow-pink transition-all duration-300 py-2"

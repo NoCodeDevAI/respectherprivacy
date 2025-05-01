@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useLayoutEffect } from 'react';
 import HeroSection from '@/components/HeroSection';
 import ReportForm from '@/components/ReportForm';
 import ResourcesCardList from '@/components/ResourcesCardList';
@@ -9,38 +9,37 @@ import { FadeIn, SlideInFromRight } from '@/components/AnimatedElements';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
+// Use a safe useLayoutEffect that falls back to useEffect on the server
+const useIsomorphicLayoutEffect = typeof window !== 'undefined' ? useLayoutEffect : useEffect;
+
 export default function HomePage() {
-  useEffect(() => {
+  useIsomorphicLayoutEffect(() => {
     // Register ScrollTrigger with GSAP
-    if (typeof window !== 'undefined') {
-      gsap.registerPlugin(ScrollTrigger);
-      
-      // Set up scroll triggers for sections
-      const sections = document.querySelectorAll('.animate-section');
-      
-      sections.forEach(section => {
-        gsap.fromTo(
-          section,
-          { opacity: 0, y: 30 },
-          {
-            opacity: 1,
-            y: 0,
-            duration: 0.8,
-            scrollTrigger: {
-              trigger: section,
-              start: 'top 80%',
-              toggleActions: 'play none none none'
-            }
+    gsap.registerPlugin(ScrollTrigger);
+    
+    // Set up scroll triggers for sections
+    const sections = document.querySelectorAll('.animate-section');
+    
+    sections.forEach(section => {
+      gsap.fromTo(
+        section,
+        { opacity: 0, y: 30 },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.8,
+          scrollTrigger: {
+            trigger: section,
+            start: 'top 80%',
+            toggleActions: 'play none none none'
           }
-        );
-      });
-    }
+        }
+      );
+    });
     
     return () => {
       // Clean up animations
-      if (typeof window !== 'undefined') {
-        ScrollTrigger.getAll().forEach(trigger => trigger.kill());
-      }
+      ScrollTrigger.getAll().forEach(trigger => trigger.kill());
     };
   }, []);
   

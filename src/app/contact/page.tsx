@@ -1,4 +1,5 @@
 'use client';
+import Link from 'next/link';
 
 import { useState } from 'react';
 import { submitContactForm } from '@/lib/supabase';
@@ -49,11 +50,11 @@ export default function ContactPage() {
             </svg>
             <h2 className="text-2xl font-bold mb-4 text-white">Thank You for Reaching Out</h2>
             <p className="text-gray-300 mb-6">
-              We've received your message and will respond to you as soon as possible.
+              We&apos;ve received your message and will respond to you as soon as possible.
             </p>
-            <a href="/" className="inline-block px-8 py-3 bg-accent-pink hover:bg-muted-pink rounded-full transition-all duration-300 transform hover:scale-105 font-medium shadow-pink">
+            <Link href="/" className="inline-block px-8 py-3 bg-accent-pink hover:bg-muted-pink rounded-full transition-all duration-300 transform hover:scale-105 font-medium shadow-pink">
               Return to Homepage
-            </a>
+            </Link>
           </div>
         </div>
       </main>

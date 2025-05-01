@@ -306,22 +306,22 @@ export default function ReportForm() {
   // Get and set the report ID from debug info if available
   useEffect(() => {
     if (debugInfo && !reportId) {
-      const idFromDebug = getReportIdFromDebugInfo();
+      const idFromDebug = getReportIdFromDebugInfo(debugInfo);
       if (idFromDebug) {
         console.log('Setting report ID from debug info:', idFromDebug);
         setReportId(idFromDebug);
       }
     }
-  }, [debugInfo, reportId]);
+  }, [debugInfo, reportId, getReportIdFromDebugInfo]);
 
   return (
-    <FadeIn className="bg-[#1A1A1A] border border-gray-800 rounded-lg shadow-xl p-6 sm:p-8 relative overflow-hidden">
+    <FadeIn className="bg-[#1A1A1A] border border-gray-800 rounded-lg shadow-xl p-6 sm:p-8 relative overflow-hidden" suppressHydrationWarning>
       {/* Decorative elements with animation */}
-      <div className="absolute top-0 right-0 w-32 h-32 bg-accent-pink rounded-full filter blur-[80px] opacity-10 animate-pulse"></div>
-      <div className="absolute bottom-0 left-0 w-32 h-32 bg-muted-pink rounded-full filter blur-[80px] opacity-10 animate-pulse"></div>
+      <div className="absolute top-0 right-0 w-32 h-32 bg-accent-pink rounded-full filter blur-[80px] opacity-10 animate-pulse" suppressHydrationWarning></div>
+      <div className="absolute bottom-0 left-0 w-32 h-32 bg-muted-pink rounded-full filter blur-[80px] opacity-10 animate-pulse" suppressHydrationWarning></div>
       
       {success ? (
-        <SlideInFromRight className="bg-[#1E2A1E] border border-green-700 text-green-400 px-6 py-5 rounded-lg" ref={successRef}>
+        <SlideInFromRight className="bg-[#1E2A1E] border border-green-700 text-green-400 px-6 py-5 rounded-lg" suppressHydrationWarning>
           <p className="text-lg font-medium">Your report has been submitted successfully.</p>
           {reportId && <p className="mt-3">Your report ID: <strong className="text-green-300">{reportId}</strong></p>}
           <p className="mt-2 text-sm text-green-300/80">Please save this ID for future reference.</p>
@@ -335,7 +335,7 @@ export default function ReportForm() {
           </AnimatedButton>
         </SlideInFromRight>
       ) : isDuplicate ? (
-        <SlideInFromRight className="bg-[#2A251E] border border-yellow-700 text-yellow-400 px-6 py-5 rounded-lg" ref={duplicateRef}>
+        <SlideInFromRight className="bg-[#2A251E] border border-yellow-700 text-yellow-400 px-6 py-5 rounded-lg" suppressHydrationWarning>
           <p className="text-lg font-medium">This content has already been reported.</p>
           <p className="mt-2 text-sm">
             <span className="text-yellow-300 font-semibold">Link:</span> 
@@ -351,7 +351,7 @@ export default function ReportForm() {
             {/* Retry button in case report ID is not found */}
             {reportId === 'Not Found' && !isDeepInspecting && (
               <button 
-                onClick={() => findReportId(duplicateLink)}
+                onClick={() => findReportId()}
                 className="ml-2 px-2 py-1 text-xs bg-yellow-800 text-yellow-200 rounded hover:bg-yellow-700 transition"
                 disabled={isDeepInspecting}
               >
@@ -380,53 +380,16 @@ export default function ReportForm() {
               Report Different Content
             </button>
           </AnimatedButton>
-          
-          {/* Debug information - only showing in specific situations */}
-          {isDuplicate && reportId === 'Not Found' && !isDeepInspecting && (debugInfo || dbInspectionResult) && (
-            <div className="mt-4 p-3 bg-black/30 rounded-md text-xs text-yellow-200/70 overflow-auto">
-              {debugInfo && (
-                <div className="mb-2">
-                  <p className="font-semibold mb-1">Debug Info:</p>
-                  <pre className="font-mono text-[10px] whitespace-pre-wrap overflow-x-auto">
-                    {JSON.stringify(debugInfo, null, 2)}
-                  </pre>
-                </div>
-              )}
-              
-              {dbInspectionResult && (
-                <div>
-                  <p className="font-semibold mb-1">Database Inspection:</p>
-                  <p>Total Records: {dbInspectionResult.totalRecords}</p>
-                  <p>Matching Records: {dbInspectionResult.matchingRecords?.length || 0}</p>
-                  
-                  {dbInspectionResult.matchingRecords?.length > 0 && (
-                    <div className="mt-2">
-                      <p className="font-semibold">Matching Record:</p>
-                      <pre className="font-mono text-[10px] whitespace-pre-wrap overflow-x-auto">
-                        {JSON.stringify(dbInspectionResult.matchingRecords[0], null, 2)}
-                      </pre>
-                    </div>
-                  )}
-                  
-                  {dbInspectionResult.fieldStructure?.length > 0 && (
-                    <p className="mt-1">
-                      Fields: {dbInspectionResult.fieldStructure.join(', ')}
-                    </p>
-                  )}
-                </div>
-              )}
-            </div>
-          )}
         </SlideInFromRight>
       ) : (
-        <form onSubmit={handleSubmit} className="space-y-6" ref={formRef}>
+        <form onSubmit={handleSubmit} className="space-y-6" ref={formRef} suppressHydrationWarning>
           {error && (
-            <div className="bg-[#2A1E1E] border border-red-700 text-red-400 px-6 py-4 rounded-lg">
+            <div className="bg-[#2A1E1E] border border-red-700 text-red-400 px-6 py-4 rounded-lg" suppressHydrationWarning>
               {error}
             </div>
           )}
           
-          <div>
+          <div suppressHydrationWarning>
             <label htmlFor="harmful_link" className="block text-soft-pink font-medium mb-2">
               Harmful Content Link <span className="text-accent-pink">*</span>
             </label>
@@ -439,13 +402,14 @@ export default function ReportForm() {
               className="w-full px-4 py-3 bg-[#2A2A2A] border border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-accent-pink text-white"
               placeholder="https://example.com/harmful-content"
               required
+              suppressHydrationWarning
             />
             <p className="text-sm text-gray-400 mt-1.5">
               Enter the full URL where the harmful content is located
             </p>
           </div>
           
-          <div>
+          <div suppressHydrationWarning>
             <label htmlFor="experience" className="block text-soft-pink font-medium mb-2">
               Your Experience <span className="text-accent-pink">*</span>
             </label>
@@ -465,7 +429,7 @@ export default function ReportForm() {
             </p>
           </div>
           
-          <div>
+          <div suppressHydrationWarning>
             <label htmlFor="email" className="block text-soft-pink font-medium mb-2">
               Email (Optional)
             </label>
@@ -477,13 +441,14 @@ export default function ReportForm() {
               onChange={handleChange}
               className="w-full px-4 py-3 bg-[#2A2A2A] border border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-accent-pink text-white"
               placeholder="your.email@example.com"
+              suppressHydrationWarning
             />
             <p className="text-sm text-gray-400 mt-1.5">
               We'll only use this to follow up on your report if necessary. You can leave this blank to remain anonymous.
             </p>
           </div>
           
-          <div className="bg-[#1E2A2A] border border-blue-900/40 p-4 rounded-lg">
+          <div className="bg-[#1E2A2A] border border-blue-900/40 p-4 rounded-lg" suppressHydrationWarning>
             <p className="text-sm text-blue-300">
               <strong className="text-soft-pink">Privacy Note:</strong> Your report is anonymous by default unless you provide an email address. 
               We generate a unique report ID for you to track your report status.
@@ -497,6 +462,7 @@ export default function ReportForm() {
               className={`w-full py-3.5 px-4 rounded-full font-medium shadow-pink transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-accent-pink ${
                 loading ? 'bg-accent-pink/50 cursor-not-allowed' : 'bg-accent-pink hover:bg-muted-pink'
               } text-white`}
+              suppressHydrationWarning
             >
               {loading ? 'Submitting...' : 'Submit Report'}
             </button>
@@ -505,4 +471,4 @@ export default function ReportForm() {
       )}
     </FadeIn>
   );
-} 
+}

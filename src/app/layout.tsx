@@ -31,23 +31,17 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
   return (
-    <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-background text-white  relative z-10 flex flex-col min-h-screen`}
-      >
+    <html lang="en" className={`${geistSans.variable} ${geistMono.variable}`}>
+      <body className="antialiased bg-background text-white relative" suppressHydrationWarning>
         {/* AnimatedBackground is imported in ClientAnimationWrapper */}
         <ClientAnimationWrapper />
-        
-        
-          <NavBar/>
-          <main className="flex-grow">
-            {children}
-          </main>
-          <Footer/>
+        <NavBar />
+        {children}
+        <Footer />
       </body>
     </html>
   );

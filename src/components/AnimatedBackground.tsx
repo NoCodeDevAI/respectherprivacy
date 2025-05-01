@@ -1,12 +1,15 @@
 "use client";
 
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
 
 export default function AnimatedBackground() {
   const containerRef = useRef<HTMLDivElement>(null);
+  const [isMounted, setIsMounted] = useState(false);
   
   useEffect(() => {
+    setIsMounted(true);
+    
     if (!containerRef.current) return;
     
     // Create particles
@@ -81,12 +84,22 @@ export default function AnimatedBackground() {
     return () => {
       // Cleanup animations
       gsap.killTweensOf(particles);
+      
+      if (containerRef.current) {
+        containerRef.current.innerHTML = '';
+      }
     };
   }, []);
   
+  if (!isMounted) {
+    return null;
+  }
+
   return (
-    <div className="fixed inset-0 w-full h-full overflow-hidden z-0 pointer-events-none" ref={containerRef}>
-      {/* Particles will be added here dynamically */}
-    </div>
+    <div 
+      ref={containerRef}
+      className="fixed inset-0 pointer-events-none overflow-hidden z-[-1]"
+      suppressHydrationWarning
+    />
   );
-} 
+}

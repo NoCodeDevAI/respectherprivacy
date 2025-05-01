@@ -1,4 +1,5 @@
 import { createClient } from '@supabase/supabase-js';
+import { PostgrestError } from '@supabase/supabase-js';
 
 if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
   throw new Error('Missing Supabase environment variables');
@@ -30,11 +31,12 @@ export async function submitContactForm(formData: {
     if (error) throw error;
 
     return { success: true, data };
-  } catch (error: any) {
+  } catch (error) {
     console.error('Error submitting contact form:', error);
+    const err = error as Error | PostgrestError;
     return {
       success: false,
-      message: error.message || 'Failed to submit message. Please try again.'
+      message: err.message || 'Failed to submit message. Please try again.'
     };
   }
 }

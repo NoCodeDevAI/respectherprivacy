@@ -23,8 +23,10 @@ export default function HeroSection() {
     const textRef = useRef<HTMLParagraphElement>(null);
     const buttonsRef = useRef<HTMLDivElement>(null);
     const [currentMessageIndex, setCurrentMessageIndex] = useState(0);
+    const [isMounted, setIsMounted] = useState(false);
 
     useEffect(() => {
+        setIsMounted(true);
         const messageInterval = setInterval(() => {
             setCurrentMessageIndex((prevIndex) => (prevIndex + 1) % empoweringMessages.length);
         }, 6000); // Change message every 6 seconds
@@ -33,100 +35,41 @@ export default function HeroSection() {
     }, []);
     
     useEffect(() => {
-      // Register ScrollTrigger with GSAP
-      if (typeof window !== 'undefined') {
+        if (!isMounted) return;
+
+        // Register ScrollTrigger with GSAP
         gsap.registerPlugin(ScrollTrigger);
-      }
-      
-      // Create the main timeline
-      const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
-      
-      // Animate the hero elements
-      tl.fromTo(
-        titleRef.current,
-        { opacity: 0, y: 30 },
-        { opacity: 1, y: 0, duration: 1 }
-      )
-      .fromTo(
-        subtitleRef.current,
-        { opacity: 0, y: 20 },
-        { opacity: 1, y: 0, duration: 0.8 },
-        "-=0.6" // Overlap with previous animation
-      )
-      .fromTo(
-        textRef.current,
-        { opacity: 0, y: 20 },
-        { opacity: 1, y: 0, duration: 0.8 },
-        "-=0.5"
-      )
-      .fromTo(
-        buttonsRef.current?.children,
-        { opacity: 0, y: 15 },
-        { opacity: 1, y: 0, duration: 0.6, stagger: 0.2 },
-        "-=0.4"
-      );
-      
-      // Background particles with mouse interaction
-      const particles = document.querySelectorAll('.particle');
-      let mouseX = 0;
-      let mouseY = 0;
-
-      // Track mouse position
-      window.addEventListener('mousemove', (e) => {
-        mouseX = (e.clientX / window.innerWidth) * 2 - 1;
-        mouseY = (e.clientY / window.innerHeight) * 2 - 1;
-      });
-
-      particles.forEach((particle, index) => {
-        const baseX = parseInt(particle.style.left || '0');
-        const baseY = parseInt(particle.style.top || '0');
-
-        // Create more dynamic movement
-        gsap.to(particle, {
-          x: () => `random(-50, 50) + ${mouseX * 20}`,
-          y: () => `random(-50, 50) + ${mouseY * 20}`,
-          rotation: () => `random(-25, 25) + ${mouseX * 10}`,
-          scale: () => 0.8 + Math.abs(Math.sin(index * 0.5)) * 0.4,
-          duration: `random(8, 15)`,
-          repeat: -1,
-          yoyo: true,
-          ease: "sine.inOut",
-          modifiers: {
-            x: gsap.utils.unitize(x => parseFloat(x)),
-            y: gsap.utils.unitize(y => parseFloat(y))
-          }
-        });
-
-        // Add subtle pulse effect
-        gsap.to(particle, {
-          opacity: () => 0.05 + Math.abs(Math.sin(index * 0.5)) * 0.1,
-          duration: `random(2, 4)`,
-          repeat: -1,
-          yoyo: true,
-          ease: "sine.inOut"
-        });
-      });
-      
-      // Add scroll-based animations
-      if (sectionRef.current) {
-        gsap.to(sectionRef.current, {
-          backgroundPosition: '0 50%',
-          scrollTrigger: {
-            trigger: sectionRef.current,
-            start: "top top",
-            end: "bottom top",
-            scrub: true
-          }
-        });
-      }
-      
-      return () => {
-        // Clean up animations
-        if (typeof window !== 'undefined') {
-          ScrollTrigger.getAll().forEach(trigger => trigger.kill());
+        
+        // Create the main timeline
+        const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
+        
+        // Animate the hero elements if they exist
+        if (titleRef.current && subtitleRef.current && textRef.current && buttonsRef.current) {
+            tl.fromTo(
+                titleRef.current,
+                { opacity: 0, y: 30 },
+                { opacity: 1, y: 0, duration: 1 }
+            )
+            .fromTo(
+                subtitleRef.current,
+                { opacity: 0, y: 20 },
+                { opacity: 1, y: 0, duration: 0.8 },
+                "-=0.6" // Overlap with previous animation
+            )
+            .fromTo(
+                textRef.current,
+                { opacity: 0, y: 20 },
+                { opacity: 1, y: 0, duration: 0.8 },
+                "-=0.5"
+            )
+            .fromTo(
+                buttonsRef.current?.children,
+                { opacity: 0, y: 15 },
+                { opacity: 1, y: 0, duration: 0.6, stagger: 0.2 },
+                "-=0.4"
+            );
         }
-      };
-    }, []);
+    }, [isMounted]);
     
     return (
       <section 
@@ -138,6 +81,7 @@ export default function HeroSection() {
           background: 'linear-gradient(-45deg, #1a0f1a, #2c1f2d, #331f33, #2c1f2d)',
           animation: 'gradient 15s ease infinite'
         }}
+        suppressHydrationWarning
       >
         <style jsx>{`
           @keyframes gradient {
@@ -147,17 +91,16 @@ export default function HeroSection() {
           }
         `}</style>
         
-        <div className="absolute inset-0 bg-gradient-to-b from-[#2c1f2d] via-[#331f33] to-[#FF69B4] opacity-10"></div>
+        <div className="absolute inset-0 bg-gradient-to-b from-[#2c1f2d] via-[#331f33] to-[#FF69B4] opacity-10" suppressHydrationWarning></div>
          
         {/* Animated particles */}
-        <div className="particle absolute top-20 left-10 w-64 h-64 bg-[#FF69B4] rounded-full filter blur-[100px] opacity-15"></div>
-        <div className="particle absolute bottom-20 right-10 w-64 h-64 bg-[#FFA5C1] rounded-full filter blur-[100px] opacity-15"></div>
-        <div className="particle absolute top-1/2 right-20 w-32 h-32 bg-[#FF69B4] rounded-full filter blur-[70px] opacity-15"></div>
-        <div className="particle absolute bottom-1/3 left-20 w-40 h-40 bg-[#FFA5C1] rounded-full filter blur-[80px] opacity-15"></div>
+        <div className="particle absolute top-20 left-10 w-64 h-64 bg-[#FF69B4] rounded-full filter blur-[100px] opacity-15" suppressHydrationWarning></div>
+        <div className="particle absolute bottom-20 right-10 w-64 h-64 bg-[#FFA5C1] rounded-full filter blur-[100px] opacity-15" suppressHydrationWarning></div>
+        <div className="particle absolute top-1/2 right-20 w-32 h-32 bg-[#FF69B4] rounded-full filter blur-[70px] opacity-15" suppressHydrationWarning></div>
+        <div className="particle absolute bottom-1/3 left-20 w-40 h-40 bg-[#FFA5C1] rounded-full filter blur-[80px] opacity-15" suppressHydrationWarning></div>
      
- 
-        <div className="max-w-4xl mx-auto text-center space-y-6 sm:space-y-8 relative z-10">
-          <div className="space-y-3 sm:space-y-4">
+        <div className="max-w-4xl mx-auto text-center space-y-6 sm:space-y-8 relative z-10" suppressHydrationWarning>
+          <div className="space-y-3 sm:space-y-4" suppressHydrationWarning>
             <h1 
               ref={titleRef}
               className="text-4xl sm:text-5xl md:text-7xl font-bold bg-gradient-to-r from-[#FF69B4] via-[#FF8AB4] to-[#FFA5C1] text-transparent bg-clip-text leading-tight opacity-0 tracking-tight"
@@ -180,6 +123,7 @@ export default function HeroSection() {
           <div 
             ref={buttonsRef}
             className="flex flex-col sm:flex-row gap-4 justify-center items-center mt-6 sm:mt-8"
+            suppressHydrationWarning
           >
             <a 
               href="#report-form" 
