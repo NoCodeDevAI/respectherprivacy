@@ -1,0 +1,93 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --foreground-rgb: 255, 255, 255;
+  --background-start-rgb: 10, 10, 10;
+  --background-end-rgb: 0, 0, 0;
+  --accent-pink: #FF69B4;
+  --soft-pink: #FFB6C1;
+  --muted-pink: #FF85A2;
+}
+
+body {
+  color: rgb(var(--foreground-rgb));
+  background: linear-gradient(
+      to bottom,
+      rgb(var(--background-start-rgb)),
+      rgb(var(--background-end-rgb))
+    );
+  min-height: 100vh;
+}
+
+/* Animation classes for background */
+@keyframes gradientFlow {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.bg-gradient-animate {
+  background-size: 200% 200%;
+  animation: gradientFlow 15s ease infinite;
+}
+
+/* Animation for floating elements */
+@keyframes float {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+  100% { transform: translateY(0px); }
+}
+
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+
+.animate-float-delayed {
+  animation: float 6s ease-in-out infinite;
+  animation-delay: 2s;
+}
+
+/* Glowing effect */
+@keyframes glow {
+  0% { filter: drop-shadow(0 0 2px rgba(255, 105, 180, 0.3)); }
+  50% { filter: drop-shadow(0 0 10px rgba(255, 105, 180, 0.5)); }
+  100% { filter: drop-shadow(0 0 2px rgba(255, 105, 180, 0.3)); }
+}
+
+.animate-glow {
+  animation: glow 4s ease-in-out infinite;
+}
+
+/* Button animations */
+.shadow-pink {
+  box-shadow: 0 4px 14px rgba(255, 105, 180, 0.3);
+  transition: all 0.3s ease;
+}
+
+.shadow-pink:hover {
+  box-shadow: 0 6px 20px rgba(255, 105, 180, 0.5);
+}
+
+/* Gradient text animation */
+@keyframes textGradientShift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.animate-gradient-text {
+  background-size: 200% auto;
+  animation: textGradientShift 5s ease infinite;
+}
+
+/* Hide scrollbar but keep functionality */
+.hide-scrollbar {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;     /* Firefox */
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;             /* Chrome, Safari, Opera */
+}
